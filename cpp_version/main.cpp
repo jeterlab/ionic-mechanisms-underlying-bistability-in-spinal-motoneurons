@@ -2,6 +2,9 @@
 #include <fstream>
 #include <vector>
 #include <stdexcept>
+#ifdef _OPENMP
+    #include <omp.h>
+#endif
 #include <boost/numeric/odeint.hpp>
 #include "neuron.h"
 
