@@ -42,7 +42,7 @@ public:
     static double get_E_K() { return E_K; }
     static const double get_E_leak() { return E_leak; }
 
-    // Setters with validation
+    // Setters for private variables that are updated through command line arguments
     static void set_g_KCa(double value) {
         if (value < 0) throw std::invalid_argument("g_KCa must be non-negative");
         g_KCa = value;
