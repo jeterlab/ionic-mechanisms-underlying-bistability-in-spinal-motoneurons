@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 
     #pragma omp parallel sections
     {
-        //Constant, linear injected current ramp up protocol
+        //Constant, linear injected current ramp protocol
         #pragma omp section
         {
             Neuron neuron(g_CAN, g_NaP, g_Kv1);
@@ -125,16 +125,16 @@ int main(int argc, char** argv) {
             neuron.I1 = I_min;
             neuron.I2 = I_max;
             state_type x = Neuron::default_initial_state();
-            std::ofstream os("dat0");
+            std::ofstream os("current_ramp_up_data.txt");
             integrate(neuron, x, 0.0, T, 0.1, OutputObserver(neuron, os, dt));
         }
-        //Tent injected current ramp up protocol
+        //Tent injected current ramp protocol
         #pragma omp section
         {
             Neuron neuron(g_CAN, g_NaP, g_Kv1);
             neuron.T = T;
             state_type x = Neuron::default_initial_state();
-            std::ofstream os("dat1");
+            std::ofstream os("current_tent_data.txt");
             neuron.I1 = I_min;
             neuron.I2 = I_max * 2.0;
             integrate(neuron, x, 0.0, T / 2.0, 0.1, OutputObserver(neuron, os, dt));
@@ -142,29 +142,13 @@ int main(int argc, char** argv) {
             neuron.I2 = I_min;
             integrate(neuron, x, T / 2.0, T, 0.1, OutputObserver(neuron, os, dt));
         }
+        //Step injected current ramp protocol
         #pragma omp section
         {
             Neuron neuron(g_CAN, g_NaP, g_Kv1);
             neuron.T = T;
             state_type x = Neuron::default_initial_state();
-            x[0] = -35.0;
-            x[2] = 1e-5;
-            std::ofstream ns("/dev/null");
-            neuron.I1 = I_max;
-            neuron.I2 = I_max;
-            integrate(neuron, x, 0.0, 1000.0, 0.1, OutputObserver(neuron, ns, dt));
-            std::ofstream os("dat2");
-            neuron.I1 = I_max;
-            neuron.I2 = I_min;
-            integrate(neuron, x, 0.0, T, 0.1, OutputObserver(neuron, os, dt));
-        }
-        //Step injected current ramp up protocol
-        #pragma omp section
-        {
-            Neuron neuron(g_CAN, g_NaP, g_Kv1);
-            neuron.T = T;
-            state_type x = Neuron::default_initial_state();
-            std::ofstream os("dat3");
+            std::ofstream os("current_step_data.txt");
             neuron.I1 = neuron.I2 = I_min;
             integrate(neuron, x, 0.0, T / 6.0, 0.1, OutputObserver(neuron, os, dt));
             neuron.I1 = neuron.I2 = I_step;
