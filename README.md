@@ -38,7 +38,7 @@ The repository is organized into two main directories:
     - [OpenMP](https://www.openmp.org/) is recommended for running simulations in parallel
   - Visualization software (currently the example uses Julia to plot the results, but gnuplot and Python also work well.)
 - **Julia Implementation**:
-  - [Julia] (https://julialang.org/) (version 1.10 or later recommended)
+  - [Julia](https://julialang.org/) (version 1.10 or later recommended)
   - Julia dependencies listed in `environment/Project.toml`
 
 ## Running the C++ Implementation
