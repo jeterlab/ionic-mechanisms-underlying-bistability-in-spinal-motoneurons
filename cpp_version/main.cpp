@@ -136,9 +136,9 @@ int main(int argc, char** argv) {
             state_type x = Neuron::default_initial_state();
             std::ofstream os("current_tent_data.txt");
             neuron.I1 = I_min;
-            neuron.I2 = I_max * 2.0;
+            neuron.I2 = I_min + (I_max - I_min) * 2.0;
             integrate(neuron, x, 0.0, T / 2.0, 0.1, OutputObserver(neuron, os, dt));
-            neuron.I1 = I_max * 2.0;
+            neuron.I1 = I_min + (I_max - I_min) * 2.0;
             neuron.I2 = I_min;
             integrate(neuron, x, T / 2.0, T, 0.1, OutputObserver(neuron, os, dt));
         }
