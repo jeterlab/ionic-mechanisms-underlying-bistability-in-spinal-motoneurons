@@ -8,8 +8,6 @@ using DelimitedFiles
 using Plots
 using LaTeXStrings
 using Measures
-using Peaks
-using DataFrames
 using DifferentialEquations
 
 include("neuron.jl")
@@ -65,7 +63,6 @@ function integrate_segments!(neuron::Neuron, filename::String, segments::Vector{
     for (tspan, I1, I2) in segments
         neuron.I1 = I1
         neuron.I2 = I2
-        neuron.T = tspan[2] - tspan[1]
         prob = ODEProblem(neuron_ode!, u, tspan, neuron)
         sol = solve(prob, Tsit5(), dt=0.1, adaptive=true, saveat=dt)
         for j in 1:length(sol.t)
@@ -158,6 +155,7 @@ function main()
 
     # Create neuron with given parameters
     neuron = Neuron(g_CAN, g_NaP, g_Kv1)
+    neuron.T = T
     set_g_Kdr!(neuron, parameters["g_Kdr"])
     set_g_NaF!(neuron, parameters["g_NaF"])
     set_g_KCa!(neuron, parameters["g_KCa"])
@@ -179,8 +177,8 @@ function main()
         # Tent injected current ramp up protocol
         u0 = default_initial_state(neuron)
         segments = [
-            ((0.0, T/2.0), I_min, I_max * 2.0),
-            ((T/2.0, T), I_max * 2.0, I_min)
+            ((0.0, T/2.0), I_min, I_min + (I_max - I_min) * 2.0)
+            ((T/2.0, T), I_min + (I_max - I_min) * 2.0, I_min)
         ]
         integrate_segments!(neuron, "tent_data.txt", segments, u0, dt)
         plot_time_series("tent_data.txt"; save_to_file = true)
@@ -196,7 +194,7 @@ function main()
             ((5.0*T/6.0, T), I_min, I_min)
         ]
         integrate_segments!(neuron, "step_data.txt", segments, u0, dt)
-        plot_time_series("step_data.txt")
+        plot_time_series("step_data.txt", save_to_file = true)
     end
 end
 
