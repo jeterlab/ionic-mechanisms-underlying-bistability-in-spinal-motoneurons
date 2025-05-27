@@ -79,3 +79,6 @@ The repository is organized into two main directories:
 ## Contact
 
 For questions or issues, please open an issue on this repository or contact [Russell Jeter](math.gsu.edu/rjeter) at [rjeter@gsu.edu](mailto:rjeter@gsu.edu).
+
+## Citation
+To cite this repository, please reference the following DOI: [![DOI](https://zenodo.org/badge/982289842.svg)](https://doi.org/10.5281/zenodo.15527834)
